@@ -7,11 +7,11 @@ import {
   INITIAL_STATE as INITIAL_INSTANCE_STATE
 } from "./external/task-instance/initial-state";
 
-const USE_TRACKED = gte('3.15.0');
+const USE_TRACKED = gte('3.16.0');
 
 function trackMixin(obj, pair) {
   const [key, value] = pair;
-  obj[key] = tracked(value);
+  obj[key] = tracked({ value });
   return obj;
 }
 
@@ -20,17 +20,17 @@ export let TRACKED_INITIAL_INSTANCE_STATE;
 
 if (USE_TRACKED) {
   TRACKED_INITIAL_TASK_STATE = Object.entries(INITIAL_TASK_STATE).reduce(trackMixin, {
-    numRunning: tracked(0),
-    numQueued: tracked(0),
-    isRunning: tracked(false),
-    isQueued: tracked(false),
-    isIdle: tracked(true),
+    numRunning: tracked({ value: 0 }),
+    numQueued: tracked({ value: 0 }),
+    isRunning: tracked({ value: false }),
+    isQueued: tracked({ value: false }),
+    isIdle: tracked({ value: true }),
   });
 
   TRACKED_INITIAL_INSTANCE_STATE = Object.entries(INITIAL_INSTANCE_STATE).reduce(trackMixin, {
-    state: tracked('waiting'),
-    isDropped: tracked(false),
-    isRunning: tracked(true),
+    state: tracked({ value: 'waiting' }),
+    isDropped: tracked({ value: false }),
+    isRunning: tracked({ value: true }),
   });
 
   Object.freeze(TRACKED_INITIAL_TASK_STATE);

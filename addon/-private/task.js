@@ -7,6 +7,7 @@ import { TASKABLE_MIXIN } from "./taskable-mixin";
 import { TRACKED_INITIAL_TASK_STATE } from "./tracked-state";
 import { CANCEL_KIND_LIFESPAN_END } from "./external/task-instance/cancelation";
 import { cleanupOnDestroy } from "./external/lifespan";
+// import { tracked } from '@glimmer/tracking';
 
 export class Task extends BaseTask {
   constructor(options) {
@@ -90,6 +91,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked isRunning;
 
   /**
    * `true` if any future task instances are queued.
@@ -99,6 +101,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked isQueued;
 
   /**
    * `true` if the task is not in the running or queued state.
@@ -108,6 +111,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked isIdle;
 
   /**
    * The current state of the task: `"running"`, `"queued"` or `"idle"`.
@@ -117,6 +121,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked state;
 
   /**
    * The most recently started task instance.
@@ -126,6 +131,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked last;
 
   /**
    * The most recent task instance that is currently running.
@@ -135,6 +141,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastRunning;
 
   /**
    * The most recently performed task instance.
@@ -144,6 +151,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastPerformed;
 
   /**
    * The most recent task instance that succeeded.
@@ -153,6 +161,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastSuccesful;
 
   /**
    * The most recently completed task instance.
@@ -162,6 +171,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastComplete;
 
   /**
    * The most recent task instance that errored.
@@ -171,6 +181,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastErrored;
 
   /**
    * The most recently canceled task instance.
@@ -180,6 +191,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastCanceled;
 
   /**
    * The most recent task instance that is incomplete.
@@ -189,6 +201,7 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked lastIncomplete;
 
   /**
    * The number of times this task has been performed.
@@ -198,6 +211,10 @@ export class Task extends BaseTask {
    * @instance
    * @readOnly
    */
+  // @tracked performCount;
+
+  // @tracked numRunning;
+  // @tracked numQueued;
 
   [INVOKE](...args) {
     return this.perform(...args);
@@ -205,7 +222,7 @@ export class Task extends BaseTask {
 }
 
 if (TRACKED_INITIAL_TASK_STATE) {
-  Object.assign(Task.prototype, TRACKED_INITIAL_TASK_STATE);
+  Object.defineProperties(Task.prototype, TRACKED_INITIAL_TASK_STATE);
 }
 
 Object.assign(Task.prototype, TASKABLE_MIXIN);
