@@ -9,29 +9,43 @@ import {
 
 const USE_TRACKED = gte('3.16.0');
 
-function trackMixin(obj, pair) {
-  const [key, value] = pair;
-  obj[key] = tracked({ value });
+function trackMixin(proto, obj, key) {
+  // const [key/*, _value*/] = pair;
+  const propDesc = Object.getOwnPropertyDescriptor(proto, key);
+  propDesc.initializer = propDesc.initializer || (() => proto[key]);
+  delete propDesc.value;
+  const desc = tracked(obj, key, propDesc);
+  obj[key] = desc;
   return obj;
+  //decorator(obj, key, undefined, undefined, true);
+  //return obj;
+}
+
+function applyTracked(proto, initial) {
+  return Object.keys(proto).reduce((acc, key) => {
+    return trackMixin(proto, acc, key);
+  }, initial);
 }
 
 export let TRACKED_INITIAL_TASK_STATE;
 export let TRACKED_INITIAL_INSTANCE_STATE;
 
 if (USE_TRACKED) {
-  TRACKED_INITIAL_TASK_STATE = Object.entries(INITIAL_TASK_STATE).reduce(trackMixin, {
-    numRunning: tracked({ value: 0 }),
-    numQueued: tracked({ value: 0 }),
-    isRunning: tracked({ value: false }),
-    isQueued: tracked({ value: false }),
-    isIdle: tracked({ value: true }),
-  });
+  TRACKED_INITIAL_TASK_STATE = applyTracked(INITIAL_TASK_STATE, {});
+  TRACKED_INITIAL_TASK_STATE = applyTracked({
+    numRunning: 0,
+    numQueued: 0,
+    isRunning: false,
+    isQueued: false,
+    isIdle: true,
+  }, TRACKED_INITIAL_TASK_STATE);
 
-  TRACKED_INITIAL_INSTANCE_STATE = Object.entries(INITIAL_INSTANCE_STATE).reduce(trackMixin, {
-    state: tracked({ value: 'waiting' }),
-    isDropped: tracked({ value: false }),
-    isRunning: tracked({ value: true }),
-  });
+  TRACKED_INITIAL_INSTANCE_STATE = applyTracked(INITIAL_INSTANCE_STATE, {});
+  TRACKED_INITIAL_INSTANCE_STATE = applyTracked({
+    state: 'waiting',
+    isDropped: false,
+    isRunning: false,
+  }, TRACKED_INITIAL_INSTANCE_STATE);
 
   Object.freeze(TRACKED_INITIAL_TASK_STATE);
   Object.freeze(TRACKED_INITIAL_INSTANCE_STATE);
