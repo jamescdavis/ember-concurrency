@@ -5,7 +5,7 @@ export const TASKABLE_MIXIN = {
     let isRunning = state.numRunning > 0;
     let isQueued = state.numQueued > 0;
     let derivedState = Object.assign(state, {
-      performCount: this.performCount + state.numPerformedInc,
+      performCount: this.performCount + (state.numPerformedInc || 0),
       isRunning,
       isQueued,
       isIdle: !isRunning && !isQueued,

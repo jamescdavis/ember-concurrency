@@ -10,15 +10,12 @@ import {
 const USE_TRACKED = gte('3.16.0');
 
 function trackMixin(proto, obj, key) {
-  // const [key/*, _value*/] = pair;
   const propDesc = Object.getOwnPropertyDescriptor(proto, key);
   propDesc.initializer = propDesc.initializer || (() => proto[key]);
   delete propDesc.value;
   const desc = tracked(obj, key, propDesc);
   obj[key] = desc;
   return obj;
-  //decorator(obj, key, undefined, undefined, true);
-  //return obj;
 }
 
 function applyTracked(proto, initial) {

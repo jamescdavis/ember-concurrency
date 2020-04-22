@@ -1,6 +1,4 @@
 import { set, get, setProperties } from '@ember/object';
-// import { tracked } from '@glimmer/tracking';
-// import { INITIAL_STATE } from "./external/task-instance/initial-state";
 import { BaseTaskInstance } from './external/task-instance/base';
 import { TRACKED_INITIAL_INSTANCE_STATE } from './tracked-state';
 
@@ -24,25 +22,6 @@ import { TRACKED_INITIAL_INSTANCE_STATE } from './tracked-state';
 */
 
 export class TaskInstance extends BaseTaskInstance {
-  //@tracked completionState;
-  //@tracked value;
-  //@tracked error;
-  //@tracked isSuccessful;
-  //@tracked isError;
-  //@tracked isCanceled;
-  //@tracked hasStarted;
-
-  // constructor(...args) {
-  //   super(...args);
-
-  //   Object.assign(this, INITIAL_STATE);
-  //   Object.assign(this, {
-  //     state: 'waiting',
-  //     isDropped: false,
-  //     isRunning: true,
-  //   });
-  // }
-
   setState(props) {
     setProperties(this, props);
     let state = this._recomputeState();
@@ -145,7 +124,6 @@ export class TaskInstance extends BaseTaskInstance {
    * @instance
    * @readOnly
    */
-  //@tracked state;
 
   /**
    * True if the TaskInstance was canceled before it could
@@ -159,7 +137,6 @@ export class TaskInstance extends BaseTaskInstance {
    * @instance
    * @readOnly
    */
-  //@tracked isDropped;
 
   /**
    * True if the task is still running.
@@ -169,7 +146,6 @@ export class TaskInstance extends BaseTaskInstance {
    * @instance
    * @readOnly
    */
-  //@tracked isRunning;
 
   /**
    * Event emitted when a new {@linkcode TaskInstance} starts executing.
