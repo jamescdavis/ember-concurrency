@@ -12,7 +12,10 @@ import { cleanupOnDestroy } from "./external/lifespan";
 export class Task extends BaseTask {
   constructor(options) {
     super(options);
-    this.setState({}); // TODO: double check this is necessary
+
+    if (!TRACKED_INITIAL_TASK_STATE) {
+      this.setState({}); // TODO: double check this is necessary
+    }
 
     cleanupOnDestroy(this.context, this, 'willDestroy', 'cancelAll', {
       reason: 'the object it lives on was destroyed or unrendered',
